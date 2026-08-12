@@ -24,7 +24,7 @@ pip install -r requirements.txt
 | `title` | Video title |
 | `channel` | Creator name |
 | `category` | Gaming / Food / Education / Music / Travel / Tech |
-| `publish_date` | ISO date in July 2026 |
+| `publish_date` | ISO date, July–August 2026 |
 | `views`, `likes`, `comments` | Engagement counts |
 | `duration_sec` | Length in seconds |
 
@@ -40,14 +40,21 @@ Real exports are never clean, so this one isn't either. The file contains a dupl
 row, one blank `likes` value, one `views` value written with thousands separators
 (`"79,432"`, which makes pandas read the whole column as text), inconsistent category
 casing (`MUSIC` vs `Music`), and a title padded with stray whitespace. Cleaning that up
-is Day 2's job — the point is to practise it, not to avoid it.
+is `load_data.py`'s job — the point is to practise it, not to avoid it.
+
+```bash
+python3 load_data.py   # prints a before/after summary of the cleaning
+```
+
+`load_data.load_clean()` is the single entry point the chart scripts use, so every
+chart from Day 3 onwards works from the same tidy DataFrame.
 
 ## Roadmap
 
 This project is built a small piece at a time. Progress:
 
 - [x] Day 1 — Scaffold: README, requirements, synthetic `data/trending.csv` generator
-- [ ] Day 2 — Load + clean the CSV with pandas (dedupe, fix dtypes, normalise categories)
+- [x] Day 2 — Load + clean the CSV with pandas (dedupe, fix dtypes, normalise categories)
 - [ ] Day 3 — Bar chart: top videos by views, written to an interactive HTML file
 - [ ] Day 4 — Scatter: views vs likes, with useful hover labels
 - [ ] Day 5 — Aggregate by category (total views / average engagement)
@@ -58,5 +65,6 @@ This project is built a small piece at a time. Progress:
 | File | Purpose |
 | --- | --- |
 | `make_sample_data.py` | Generates the synthetic `data/trending.csv` |
+| `load_data.py` | Loads + cleans the CSV; `load_clean()` returns the tidy DataFrame |
 | `data/trending.csv` | The dataset the charts are built from |
 | `requirements.txt` | pandas + plotly |
