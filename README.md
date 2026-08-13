@@ -49,13 +49,33 @@ python3 load_data.py   # prints a before/after summary of the cleaning
 `load_data.load_clean()` is the single entry point the chart scripts use, so every
 chart from Day 3 onwards works from the same tidy DataFrame.
 
+## The charts
+
+Each chart script writes a standalone HTML file into `output/` (git-ignored, since
+it's regenerated). Open the file in a browser — Plotly's hover, zoom and pan all
+work offline apart from loading plotly.js from a CDN.
+
+### Top videos by views (Day 3)
+
+```bash
+python3 chart_top_videos.py             # top 10 -> output/top_videos.html
+python3 chart_top_videos.py --top 5     # fewer bars
+python3 chart_top_videos.py -o mine.html
+```
+
+A horizontal bar chart, most-viewed at the top, coloured by category. Titles are
+shortened by `shorten()` so the axis labels stay readable, and hovering a bar shows
+the channel plus like and comment counts. The chart-building logic lives in
+`build_figure(df, top)`, which takes a DataFrame and returns a Plotly figure — so it
+can be reused by the combined report on Day 6 without re-reading the CSV.
+
 ## Roadmap
 
 This project is built a small piece at a time. Progress:
 
 - [x] Day 1 — Scaffold: README, requirements, synthetic `data/trending.csv` generator
 - [x] Day 2 — Load + clean the CSV with pandas (dedupe, fix dtypes, normalise categories)
-- [ ] Day 3 — Bar chart: top videos by views, written to an interactive HTML file
+- [x] Day 3 — Bar chart: top videos by views, written to an interactive HTML file
 - [ ] Day 4 — Scatter: views vs likes, with useful hover labels
 - [ ] Day 5 — Aggregate by category (total views / average engagement)
 - [ ] Day 6 — Combine the charts into one report HTML + polish
@@ -66,5 +86,6 @@ This project is built a small piece at a time. Progress:
 | --- | --- |
 | `make_sample_data.py` | Generates the synthetic `data/trending.csv` |
 | `load_data.py` | Loads + cleans the CSV; `load_clean()` returns the tidy DataFrame |
+| `chart_top_videos.py` | Day 3 bar chart: top N videos by views |
 | `data/trending.csv` | The dataset the charts are built from |
 | `requirements.txt` | pandas + plotly |
