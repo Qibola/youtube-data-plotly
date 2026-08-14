@@ -69,6 +69,27 @@ the channel plus like and comment counts. The chart-building logic lives in
 `build_figure(df, top)`, which takes a DataFrame and returns a Plotly figure — so it
 can be reused by the combined report on Day 6 without re-reading the CSV.
 
+### Views vs likes (Day 4)
+
+```bash
+python3 chart_views_vs_likes.py            # -> output/views_vs_likes.html
+python3 chart_views_vs_likes.py --linear   # linear axes instead of log
+```
+
+One dot per video: views across the bottom, likes up the side, coloured by category
+and sized by comment count. The cloud slopes up and to the right, which is the point
+— more reach generally means more likes — and the dots that sit above or below that
+line are the ones worth looking at.
+
+Both axes are logarithmic by default. View counts here run from a few thousand to
+over two million, and on a linear axis that one huge video flattens everything else
+into a smudge near the origin; a log axis gives each order of magnitude the same
+space. `--linear` switches back if you want the raw picture.
+
+`add_engagement(df)` adds a `like_rate` column (likes as a percentage of views) that
+shows up in the hover box. It guards against dividing by zero, and it returns a copy
+rather than editing the DataFrame it was handed.
+
 ## Roadmap
 
 This project is built a small piece at a time. Progress:
@@ -76,7 +97,7 @@ This project is built a small piece at a time. Progress:
 - [x] Day 1 — Scaffold: README, requirements, synthetic `data/trending.csv` generator
 - [x] Day 2 — Load + clean the CSV with pandas (dedupe, fix dtypes, normalise categories)
 - [x] Day 3 — Bar chart: top videos by views, written to an interactive HTML file
-- [ ] Day 4 — Scatter: views vs likes, with useful hover labels
+- [x] Day 4 — Scatter: views vs likes, with useful hover labels
 - [ ] Day 5 — Aggregate by category (total views / average engagement)
 - [ ] Day 6 — Combine the charts into one report HTML + polish
 
@@ -87,5 +108,6 @@ This project is built a small piece at a time. Progress:
 | `make_sample_data.py` | Generates the synthetic `data/trending.csv` |
 | `load_data.py` | Loads + cleans the CSV; `load_clean()` returns the tidy DataFrame |
 | `chart_top_videos.py` | Day 3 bar chart: top N videos by views |
+| `chart_views_vs_likes.py` | Day 4 scatter: views vs likes, sized by comments |
 | `data/trending.csv` | The dataset the charts are built from |
 | `requirements.txt` | pandas + plotly |
