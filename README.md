@@ -90,6 +90,26 @@ space. `--linear` switches back if you want the raw picture.
 shows up in the hover box. It guards against dividing by zero, and it returns a copy
 rather than editing the DataFrame it was handed.
 
+### Category totals (Day 5)
+
+```bash
+python3 chart_by_category.py                 # -> output/by_category.html
+python3 chart_by_category.py --sort likes    # order categories by like rate
+```
+
+The first chart that isn't one-bar-per-video. `summarise_categories(df)` groups
+the videos with `df.groupby("category").agg(...)` and returns one row per
+category: video count, total and average views, total likes and comments, and a
+like rate. The rate is worked out from the category's totals (`total_likes /
+total_views`) rather than by averaging each video's own rate — otherwise one tiny
+video with a freak rate would drag its whole category up.
+
+The chart puts two answers side by side: bars are total views, dots are the like
+rate. They're on wildly different scales, so the like rate rides on a second
+y-axis (`yaxis="y2"` with `overlaying="y"`). That's the thing worth reading — the
+categories where the bar and the dot disagree. Music has the most views but not
+the best like rate; Education pulls fewer views and the most engaged audience.
+
 ## Roadmap
 
 This project is built a small piece at a time. Progress:
@@ -98,7 +118,7 @@ This project is built a small piece at a time. Progress:
 - [x] Day 2 — Load + clean the CSV with pandas (dedupe, fix dtypes, normalise categories)
 - [x] Day 3 — Bar chart: top videos by views, written to an interactive HTML file
 - [x] Day 4 — Scatter: views vs likes, with useful hover labels
-- [ ] Day 5 — Aggregate by category (total views / average engagement)
+- [x] Day 5 — Aggregate by category (total views / average engagement)
 - [ ] Day 6 — Combine the charts into one report HTML + polish
 
 ## Files
@@ -109,5 +129,6 @@ This project is built a small piece at a time. Progress:
 | `load_data.py` | Loads + cleans the CSV; `load_clean()` returns the tidy DataFrame |
 | `chart_top_videos.py` | Day 3 bar chart: top N videos by views |
 | `chart_views_vs_likes.py` | Day 4 scatter: views vs likes, sized by comments |
+| `chart_by_category.py` | Day 5 per-category totals: views bars + like-rate line |
 | `data/trending.csv` | The dataset the charts are built from |
 | `requirements.txt` | pandas + plotly |
