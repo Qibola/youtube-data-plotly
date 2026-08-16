@@ -110,6 +110,25 @@ y-axis (`yaxis="y2"` with `overlaying="y"`). That's the thing worth reading — 
 categories where the bar and the dot disagree. Music has the most views but not
 the best like rate; Education pulls fewer views and the most engaged audience.
 
+### The combined report (Day 6)
+
+```bash
+python3 report.py             # -> output/report.html
+python3 report.py --top 5     # fewer bars in the first chart
+```
+
+One page with all three charts on it, plus a row of headline numbers and a
+sentence of context above each chart. Nothing here re-draws a chart: `report.py`
+imports the other scripts and calls their `build_figure()` functions, so the
+charts on the report are the same charts as the standalone files.
+
+The piece worth reading is `build_sections()`. `fig.to_html(full_html=False)`
+returns just the `<div>` for a chart instead of a whole document, which is what
+lets three figures share one page. Plotly's JS library is about 3MB, and it only
+needs to be on the page once — so the first chart is rendered with
+`include_plotlyjs="cdn"` and the other two with `include_plotlyjs=False`. Get
+that wrong and the page loads the same library three times.
+
 ## Roadmap
 
 This project is built a small piece at a time. Progress:
@@ -119,7 +138,7 @@ This project is built a small piece at a time. Progress:
 - [x] Day 3 — Bar chart: top videos by views, written to an interactive HTML file
 - [x] Day 4 — Scatter: views vs likes, with useful hover labels
 - [x] Day 5 — Aggregate by category (total views / average engagement)
-- [ ] Day 6 — Combine the charts into one report HTML + polish
+- [x] Day 6 — Combine the charts into one report HTML + polish
 
 ## Files
 
@@ -130,5 +149,6 @@ This project is built a small piece at a time. Progress:
 | `chart_top_videos.py` | Day 3 bar chart: top N videos by views |
 | `chart_views_vs_likes.py` | Day 4 scatter: views vs likes, sized by comments |
 | `chart_by_category.py` | Day 5 per-category totals: views bars + like-rate line |
+| `report.py` | Day 6: all three charts on one HTML page with headline stats |
 | `data/trending.csv` | The dataset the charts are built from |
 | `requirements.txt` | pandas + plotly |
